@@ -1,16 +1,29 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-Console.WriteLine("123");
-//string? name = Console.ReadLine();
-//Console.WriteLine(name);
-//Console.WriteLine($"Hello, { name }")
-Console.WriteLine(1.2E10);
+﻿
+public class Publisher
+{
+    public event EventHandler<char> OnKeyPressed;
 
+    public void Run()
+    {
+        char pressed_key = Console.ReadKey().KeyChar;
+        while (pressed_key != 'c' && pressed_key != 'C')
+        {
+            OnKeyPressed?.Invoke(this, pressed_key);
+            pressed_key = Console.ReadKey().KeyChar;
+        }
+    }
+}
 
-Console.WriteLine("name: ");
-var name = Console.ReadLine();
-Console.WriteLine("heigt: ");
-var height = Convert.ToInt16(Console.ReadLine());
-int wingspan = Convert.ToInt16(Console.ReadLine());
-Console.WriteLine("Name:{0}, height:{1}, wingspan:{2}", name, height, wingspan);
-
+class Program
+{
+    static void Main(string[] args)
+    {
+        var reader = new Publisher();
+        reader.OnKeyPressed += PressedKeyHandler;
+        reader.Run();
+    }
+    public static void PressedKeyHandler(object sender, char pressed_key)
+    {
+        Console.WriteLine(" pressed key: " + pressed_key);
+    }
+}
